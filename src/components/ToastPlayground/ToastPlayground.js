@@ -3,20 +3,15 @@ import React from 'react';
 import Button from '../Button';
 
 import styles from './ToastPlayground.module.css';
-
-import ToastShelf from '../ToastShelf/ToastShelf';
+import { CtxToasts } from '../ToastProvider/ToastProvider';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
-export const CtxToasts = React.createContext()
-
 function ToastPlayground() {
+
+	const { addToast } = React.useContext(CtxToasts)
 	const [ message, setMessage ] = React.useState('')
 	const [ choosenVariant, setChoosenVariant ] = React.useState(VARIANT_OPTIONS[0])
-
-	const [ toasts, setToasts ] = React.useState([])
-	const addToast = toast => setToasts(currArr => [...currArr, toast ])
-	const removeToast = toastId => setToasts( currentArr => currentArr.filter( val => val.id !== toastId))
 
 	const handleSubmit = e => {
 		e.preventDefault()
@@ -28,14 +23,11 @@ function ToastPlayground() {
 	}
 
   return (
-		<CtxToasts.Provider value={{ toasts, removeToast }}> 
     <div className={styles.wrapper}>
       <header>
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
-
-			<ToastShelf />
 
       <form onSubmit={handleSubmit} className={styles.controlsWrapper}>
         <div className={styles.row}>
@@ -82,7 +74,6 @@ function ToastPlayground() {
         </div>
       </form>
     </div>
-		</CtxToasts.Provider>
   );
 }
 
